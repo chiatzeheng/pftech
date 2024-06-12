@@ -1,11 +1,27 @@
-import { Text, View } from 'tamagui'
+import "react-native-url-polyfill/auto";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import Auth from "@/app/components/auth";
+import { View, Text } from "react-native";
+import { Session } from "@supabase/supabase-js";
 
 export default function TabTwoScreen() {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
   return (
-    <View flex={1} alignItems="center" justifyContent="center">
-      <Text fontSize={20} color="$blue10">
-        Tab Two
-      </Text>
+    <View>
+      <Auth />
+      {session && session.user && <Text>{session.user.id}</Text>}
     </View>
-  )
+  );
 }
