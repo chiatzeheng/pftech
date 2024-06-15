@@ -3,7 +3,7 @@ import { useTheme } from "tamagui";
 import {
   Home,
   AlignHorizontalDistributeCenter,
-  Users,
+  WalletCards,
   Command,
 } from "@tamagui/lucide-icons";
 
@@ -21,7 +21,6 @@ export default function TabLayout() {
         name="home/page"
         options={{
           title: "Home",
-
           tabBarIcon: ({ color }) => <Home size={25} color={color} />,
         }}
       />
@@ -36,10 +35,10 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="recipients/page"
+        name="card/page"
         options={{
-          title: "Recipients",
-          tabBarIcon: ({ color }) => <Users size={25} color={color} />,
+          title: "Cards",
+          tabBarIcon: ({ color }) => <WalletCards size={25} color={color} />,
         }}
       />
       <Tabs.Screen

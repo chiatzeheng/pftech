@@ -25,7 +25,7 @@ import {
 import Avatar from "@/components/avatar";
 import { currency, transactions, user } from "@/lib/data";
 import { Suspense, useState } from "react";
-import TransactionDialog from "@/components/dialog";
+import TransactionDialog from "@/components/transactiondialog";
 // import Camera from "@/components/camera";
 
 type Currency = {
@@ -43,7 +43,7 @@ export default function Home() {
     <ScrollView bouncesZoom>
       <YStack f={1} px="$3" pt="$10" columnGap="1">
         <XStack f={1} my={"$3"} ai={"center"}>
-          <Avatar props={user} />
+          <Avatar {...user} />
           <Button
             jc={"flex-end"}
             ml={"auto"}
@@ -67,7 +67,7 @@ export default function Home() {
           horizontal
           maxHeight={50}
         >
-          <XStack gap={"$2"} br={15} fontWeight="bold">
+          <XStack gap={"$2"} br={15}>
             <Button backgroundColor={theme.red10.val}>
               <Send /> Send
             </Button>

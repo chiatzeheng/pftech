@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { Link } from "expo-router";
 import { Avatar } from "tamagui";
 
 type AvatarProps = {
@@ -7,9 +7,11 @@ type AvatarProps = {
   cuid: string;
 };
 
-export default ({ props }: AvatarProps) => (
-  <Avatar circular size="$4">
-    <Avatar.Image src={props?.image || "http://picsum.photos/200/300"} />
-    <Avatar.Fallback bc="red" />
-  </Avatar>
+export default ({ ...props }: AvatarProps) => (
+  <Link href={`/user/${props.cuid}`}>
+    <Avatar circular size="$4">
+      <Avatar.Image src={props.image || "http://picsum.photos/200/300"} />
+      <Avatar.Fallback bc="red" />
+    </Avatar>
+  </Link>
 );
