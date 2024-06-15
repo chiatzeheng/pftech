@@ -1,37 +1,54 @@
-import { Link, Tabs } from 'expo-router'
-import { Button, useTheme } from 'tamagui'
-import { Atom, AudioWaveform } from '@tamagui/lucide-icons'
+import { Tabs } from "expo-router";
+import { useTheme } from "tamagui";
+import {
+  Home,
+  AlignHorizontalDistributeCenter,
+  Users,
+  Command,
+} from "@tamagui/lucide-icons";
 
 export default function TabLayout() {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: theme.red10.val,
+        headerShown: false,
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home/page"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <Atom color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Button mr="$4" bg="$purple8" color="$purple12">
-                Hello!
-              </Button>
-            </Link>
-          ),
+          title: "Home",
+
+          tabBarIcon: ({ color }) => <Home size={25} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="invest/page"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <AudioWaveform color={color} />,
+          title: "Invest",
+          tabBarIcon: ({ color }) => (
+            <AlignHorizontalDistributeCenter size={25} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="recipients/page"
+        options={{
+          title: "Recipients",
+          tabBarIcon: ({ color }) => <Users size={25} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="commands/page"
+        options={{
+          title: "Commands",
+          tabBarIcon: ({ color }) => <Command size={25} color={color} />,
         }}
       />
     </Tabs>
-  )
+  );
 }
