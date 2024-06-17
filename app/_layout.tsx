@@ -70,7 +70,7 @@ function RootLayoutNav() {
           />
           {/* ) : (
             <Stack.Screen
-              name="(auth)/index"
+              name="auth/page"
               options={{
                 headerShown: false,
               }}

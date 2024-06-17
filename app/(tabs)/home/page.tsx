@@ -33,7 +33,7 @@ type Currency = {
   symbol: string;
 };
 
-export default function Home() {
+const Home = () => {
   const theme = useTheme();
   const [value, setValue] = useState<Currency>();
   const [camera, setCamera] = useState<boolean>(false);
@@ -206,3 +206,5 @@ export default function Home() {
     </ScrollView>
   );
 }
+
+export default Home;

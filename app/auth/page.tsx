@@ -20,7 +20,7 @@ const demosTitle: Record<(typeof demos)[number], string> = {
 
   underline: "Underline Indicator",
 };
-export const TabsAdvancedDemo = () => {
+const TabsAdvancedDemo = () => {
   const [demoIndex, setDemoIndex] = useState(0);
 
   const demo = demos[demoIndex];
@@ -50,6 +50,9 @@ export const TabsAdvancedDemo = () => {
     </>
   );
 };
+
+export default TabsAdvancedDemo;
+
 const TabsAdvancedBackground = () => {
   const [tabState, setTabState] = useState<{
     currentTab: string;
