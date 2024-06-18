@@ -4,16 +4,14 @@ import {
   Button,
   Input,
   SizableText,
-  View,
   YStack,
   Form,
-  H4,
   Spinner,
   Text,
   H1,
+  XStack,
 } from "tamagui";
 import { supabase } from "@/lib/supabase";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import { login } from "@/lib/schema";
 
 function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
@@ -30,11 +28,12 @@ function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
 //after login display animation
 function showAnimation() {}
 
-export function Register() {
+function Register() {
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
+      phoneNumber: "",
     },
     onSubmit: async ({ value }) => {
       await supabase.auth.signInWithPassword({
@@ -60,7 +59,6 @@ export function Register() {
         }}
         backgroundColor="$background"
       >
-        <H1 marginBottom="$1">Login</H1>
         <form.Field
           name="email"
           children={(field) => {
@@ -96,6 +94,25 @@ export function Register() {
             </>
           )}
         />
+        <form.Field
+          name="pn"
+          children={(field) => (
+            <>
+              <SizableText htmlFor={field.name}></SizableText>
+              <XStack alignItems="center" space="$2">
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type="password"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+              </XStack>
+              <FieldInfo field={field} />
+            </>
+          )}
+        />
 
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -106,7 +123,7 @@ export function Register() {
                 type="submit"
                 disabled={!canSubmit}
               >
-                {isSubmitting ? <Spinner /> : "Log In"}
+                {isSubmitting ? <Spinner /> : "Register"}
               </Button>
             </>
           )}

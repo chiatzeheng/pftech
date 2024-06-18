@@ -13,13 +13,8 @@ import { Provider } from "./provider";
 import "react-native-url-polyfill/auto";
 import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
+export { ErrorBoundary } from "expo-router";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -70,7 +65,7 @@ function RootLayoutNav() {
           />
           {/* ) : (
             <Stack.Screen
-              name="auth/page"
+              name="index"
               options={{
                 headerShown: false,
               }}

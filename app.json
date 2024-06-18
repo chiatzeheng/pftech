@@ -30,7 +30,6 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "@prisma/react-native",
       [
         "expo-camera",
         {

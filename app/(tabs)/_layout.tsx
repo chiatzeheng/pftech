@@ -42,7 +42,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="commands/page"
+        name="payments/page"
         options={{
           title: "Commands",
           tabBarIcon: ({ color }) => <Command size={25} color={color} />,
