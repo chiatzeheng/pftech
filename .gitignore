@@ -60,3 +60,5 @@ apps/studio/types/**
 .expo
 yarn.lock
 package-lock.json
+android
+ios

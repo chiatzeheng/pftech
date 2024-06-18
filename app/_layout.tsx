@@ -9,11 +9,14 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { Provider } from "./provider";
 import "react-native-url-polyfill/auto";
-import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
 export { ErrorBoundary } from "expo-router";
+import { CurrentToast } from "@/components/toast";
+import { useAuth } from "@/utils/context";
+import { TamaguiProvider, type TamaguiProviderProps } from "tamagui";
+import { ToastProvider, ToastViewport } from "@tamagui/toast";
+import { config } from "../tamagui.config";
+import { AuthProvider } from "@/utils/context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,46 +37,57 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  );
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
+  const { isAuthenticated } = useAuth();
 
   return (
-    <Provider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          {/* {session ? ( */}
-          <Stack.Screen
-            name="(tabs)"
-            options={{
-              headerShown: false,
-            }}
-          />
-          {/* ) : (
+    <TamaguiProvider
+      config={config}
+      defaultTheme={colorScheme === "dark" ? "dark" : "light"}
+    >
+      <ToastProvider
+        swipeDirection="horizontal"
+        duration={6000}
+        native={
+          [
+            /* uncomment the next line to do native toasts on mobile. NOTE: it'll require you making a dev build and won't work with Expo Go */
+            // 'mobile'
+          ]
+        }
+      >
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            {/* {isAuthenticated ? ( */}
             <Stack.Screen
-              name="index"
+              name="(tabs)"
               options={{
                 headerShown: false,
               }}
             />
-          )} */}
-        </Stack>
-      </ThemeProvider>
-    </Provider>
+            {/* ) : (
+              <Stack.Screen
+                name="index"
+                options={{
+                  headerShown: false,
+                }}
+              />
+            )} */}
+          </Stack>
+          <CurrentToast />
+          <ToastViewport top="$8" left={0} right={0} />
+        </ThemeProvider>
+      </ToastProvider>
+    </TamaguiProvider>
   );
 }
 

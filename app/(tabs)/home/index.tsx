@@ -24,9 +24,14 @@ import {
 } from "@tamagui/lucide-icons";
 import Avatar from "@/components/avatar";
 import { currency, transactions, user } from "@/lib/data";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import TransactionDialog from "@/components/transactiondialog";
-// import Camera from "@/components/camera";
+import { router } from "expo-router";
+import { web3auth } from "@/lib/web3auth";
+import "react-native-get-random-values";
+import "@ethersproject/shims";
+import { ethers } from "ethers";
+import { useToastController } from "@tamagui/toast";
 
 type Currency = {
   amount: number;
@@ -38,6 +43,28 @@ const Home = () => {
   const [value, setValue] = useState<Currency>();
   const [camera, setCamera] = useState<boolean>(false);
   const [showCurrency, setCurrency] = useState<boolean>(false);
+  const [provider, setProvider] = useState<any>();
+  const toast = useToastController();
+
+  const getBalance = async () => {
+    if (!provider) {
+      toast.show("Provider Missing", {
+        message: "Logout and Lock In",
+        type: "success",
+      });
+    }
+    const ethersProvider = new ethers.BrowserProvider(provider!);
+    const signer = await ethersProvider.getSigner();
+    const address = signer.getAddress();
+    const balance = ethers.formatEther(
+      await ethersProvider.getBalance(address) // Balance is in wei
+    );
+    return { address, balance };
+  };
+
+  useEffect(() => {
+    getAccounts();
+  }, []);
 
   return (
     <ScrollView bouncesZoom>
@@ -68,7 +95,10 @@ const Home = () => {
           maxHeight={50}
         >
           <XStack gap={"$2"} br={15}>
-            <Button backgroundColor={theme.red10.val}>
+            <Button
+              backgroundColor={theme.red10.val}
+              onPress={() => router.push("/home/send")}
+            >
               <Send /> Send
             </Button>
             <Button>
@@ -205,6 +235,6 @@ const Home = () => {
       </YStack>
     </ScrollView>
   );
-}
+};
 
 export default Home;
