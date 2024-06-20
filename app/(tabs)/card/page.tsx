@@ -1,6 +1,5 @@
 import { View } from "tamagui";
 
-const CardPage = () => {
-  return <View></View>;
+const Card = (props) => {
+  return <View />;
 };
-export default CardPage;

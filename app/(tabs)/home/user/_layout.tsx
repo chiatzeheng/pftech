@@ -4,9 +4,7 @@ import { useTheme } from "tamagui";
 export default function TabLayout() {
   return (
     <Stack screenOptions={{ header: () => null }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="send" />
-      <Stack.Screen name="user" />
+      <Stack.Screen name="[id]" />
     </Stack>
   );
 }

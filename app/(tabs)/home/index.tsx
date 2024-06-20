@@ -13,6 +13,7 @@ import {
   Dialog,
   Adapt,
   Sheet,
+  Avatar,
 } from "tamagui";
 import {
   BarChart,
@@ -22,16 +23,17 @@ import {
   Scan,
   MoveDiagonal,
 } from "@tamagui/lucide-icons";
-import Avatar from "@/components/avatar";
+import "@/utils/globals";
 import { currency, transactions, user } from "@/lib/data";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import TransactionDialog from "@/components/transactiondialog";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { web3auth } from "@/lib/web3auth";
 import "react-native-get-random-values";
 import "@ethersproject/shims";
 import { ethers } from "ethers";
 import { useToastController } from "@tamagui/toast";
+import { useContextProvider } from "@/utils/context";
 
 type Currency = {
   amount: number;
@@ -41,51 +43,61 @@ type Currency = {
 const Home = () => {
   const theme = useTheme();
   const [value, setValue] = useState<Currency>();
-  const [camera, setCamera] = useState<boolean>(false);
-  const [showCurrency, setCurrency] = useState<boolean>(false);
-  const [provider, setProvider] = useState<any>();
+  const { provider } = useContextProvider();
   const toast = useToastController();
+  const [balance, setBalance] = useState<string>("");
+  const [address, setAddress] = useState<Object>();
 
-  const getBalance = async () => {
-    if (!provider) {
-      toast.show("Provider Missing", {
-        message: "Logout and Lock In",
-        type: "success",
-      });
-    }
-    const ethersProvider = new ethers.BrowserProvider(provider!);
-    const signer = await ethersProvider.getSigner();
-    const address = signer.getAddress();
-    const balance = ethers.formatEther(
-      await ethersProvider.getBalance(address) // Balance is in wei
-    );
-    return { address, balance };
-  };
-
+  const getBalance = useMemo(() => {
+    return async () => {
+      if (!provider) {
+        toast.show("Provider Missing", {
+          message: "Logout and Lock In",
+          type: "error",
+        });
+      }
+      const ethersProvider = new ethers.BrowserProvider(provider!);
+      const signer = await ethersProvider.getSigner();
+      const address = signer.getAddress();
+      const balance = ethers.formatEther(
+        await ethersProvider.getBalance(address)
+      );
+      setBalance(balance);
+      setAddress(address);
+      console.log(address);
+    };
+  }, [provider]);
   useEffect(() => {
-    getAccounts();
+    getBalance();
   }, []);
+
+  const info = web3auth.userInfo(); // User Information
 
   return (
     <ScrollView bouncesZoom>
       <YStack f={1} px="$3" pt="$10" columnGap="1">
         <XStack f={1} my={"$3"} ai={"center"}>
-          <Avatar {...user} />
-          <Button
+          <Link href={`/user/${info?.name}`}>
+            <Avatar circular size="$4">
+              <Avatar.Image src={"http://picsum.photos/200/300"} />
+              <Avatar.Fallback bc="red" />
+            </Avatar>
+          </Link>
+          {/* <Button
             jc={"flex-end"}
             ml={"auto"}
             bg="$colorTransparent"
             onPress={() => setCamera(true)}
           >
-            {/* <Camera /> */}
-          </Button>
+            <Camera />
+          </Button> */}
         </XStack>
         <Paragraph fontWeight="bold">Total Balance</Paragraph>
         <Suspense fallback={<H1>Loading...</H1>}>
           <H1>
             {value?.amount}
             {value?.symbol}
-            300 ETH
+            {balance}
           </H1>
         </Suspense>
 
@@ -153,7 +165,7 @@ const Home = () => {
                     <View>
                       <Paragraph theme="alt2" fontSize={16}>
                         <Blocks />
-                        {item.address.slice(0, 10)}...
+                        {address?._j?.slice(0, 10)}...
                       </Paragraph>
                     </View>
                   </XStack>

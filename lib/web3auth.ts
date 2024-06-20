@@ -1,4 +1,5 @@
 // // Dont touch this file unless you know what ur doing
+
 import Constants, { AppOwnership } from "expo-constants";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
@@ -14,8 +15,7 @@ export const redirectUrl =
     ? Linking.createURL("web3auth", {})
     : Linking.createURL("web3auth", { scheme: "myapp" });
 
-const clientId =
-  "BPhMbDuvcUl0_kq5Si3QHdtIbiE6kzeD01HMtvfNZ2VLMqGZtaMeptB5FPEmUFSWIKy0B8YkM4Bgdq_X0behklw";
+const clientId = process.env.EXPO_PUBLIC_WEB3AUTH_CLIENT_ID || "";
 
 export const chainConfig = {
   chainNamespace: ChainNamespace.EIP155,
@@ -40,5 +40,7 @@ export const ethereumPrivateKeyProvider = new EthereumPrivateKeyProvider({
 export const web3auth = new Web3Auth(WebBrowser, SecureStore, {
   clientId,
   redirectUrl,
-  network: OPENLOGIN_NETWORK.SAPPHIRE_DEVNET, // or other networks
+  network: OPENLOGIN_NETWORK.TESTNET, // or other networks
 });
+
+web3auth.init();

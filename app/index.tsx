@@ -1,15 +1,22 @@
 // src/components/App.js
 import React from "react";
 import { Button, YStack, Input } from "tamagui";
+import { useContextProvider } from "@/utils/context";
 import { useToastController } from "@tamagui/toast";
-import { useAuth } from "@/utils/context";
+import { router } from "expo-router";
 
 export default function App() {
+  const [email, setEmail] = React.useState("");
+  const { login } = useContextProvider();
   const toast = useToastController();
-  const { email, setEmail, login } = useAuth();
 
-  const handleLogin = () => {
-    login(email, toast);
+  const handleLogin = async () => {
+    try {
+      await login(email, toast);
+      router.replace("(tabs)/home");
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   return (

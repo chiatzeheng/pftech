@@ -25,7 +25,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="invest/page"
+        name="invest"
         options={{
           title: "Invest",
           tabBarIcon: ({ color }) => (
@@ -35,14 +35,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="card/page"
+        name="card"
         options={{
           title: "Cards",
           tabBarIcon: ({ color }) => <WalletCards size={25} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="payments/page"
+        name="payments"
         options={{
           title: "Commands",
           tabBarIcon: ({ color }) => <Command size={25} color={color} />,
